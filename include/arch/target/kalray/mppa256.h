@@ -42,6 +42,7 @@
 
 	#include <arch/target/kalray/mppa256/stdout.h>
 	#include <arch/target/kalray/mppa256/sync.h>
+	#include <arch/target/kalray/mppa256/mailbox.h>
 
 /**@}*/
 
@@ -59,7 +60,7 @@
 	/**@{*/
 	#define TARGET_HAS_STDOUT  1 /**< Standard Output feature */
 	#define TARGET_HAS_SYNC    1 /**< Synchronization feature */
-	#define TARGET_HAS_MAILBOX 0 /**< Mailbox feature         */
+	#define TARGET_HAS_MAILBOX 1 /**< Mailbox feature         */
 	/**@}*/
 
 	/**

@@ -197,4 +197,4 @@
 		return mppa256_sync_signal(syncid, nodes, nnodes, type);
 	}
 
-#endif /* ARCH_MPPA256_SYNC_H_ */
+#endif /* TARGET_KALRAY_MPPA256_SYNC_H_ */
