@@ -11,5 +11,6 @@ tools/dev/toolchain/riscv64/
 
 doc/html
 bin/
+.vscode/
 
 tags

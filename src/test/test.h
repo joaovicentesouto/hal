@@ -79,4 +79,9 @@
 	 */
 	EXTERN void test_mmu(void);
 
+	/**
+	 * @brief Test driver for the Sync Interface
+	 */
+	EXTERN void kalray_sync(void);
+
 #endif /* _HAL_TEST_H_ */

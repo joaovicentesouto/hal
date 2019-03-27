@@ -88,7 +88,7 @@ case $test in
 		mode="--long"
 	;&
 	kernel-core)
-		echo "=== Running Core and NoC Interface Tests"
+		echo "=== Running C-NoC with Events"
 		run_hw "hal-debug.img" "bin/test-driver" "--debug --hal-core" "$debug" "$type"
 		stop_if_short_test $mode
 	;&

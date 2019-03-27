@@ -51,10 +51,11 @@ PUBLIC int bostan_cnoc_rx_config(int interface, int tag, int mode, uint64_t mask
 	mppa_cnoc_mailbox_notif_t notif = {0};
 	notif._.enable = 1;
 	notif._.evt_en = 1;
+
 #ifdef __node__
-	notif._.pe = (uint16_t) ~0;
+	notif._.pe = ((uint16_t) ~0); //! Any PE can wait the signal
 #else
-	notif._.rm = (uint8_t) ~0;
+	notif._.rm = ((uint8_t) (1 << interface));
 #endif
 
 	__builtin_k1_wpurge();
