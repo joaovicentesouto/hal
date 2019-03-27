@@ -103,13 +103,13 @@ PUBLIC int interrupt_unregister(int num)
  */
 PUBLIC void interrupt_setup(void)
 {
+	kputs("[hal] initializing interrupt interface...\n");
+
 	for (int i = 0; i < INTERRUPTS_NUM; i++)
 	{
 		interrupts[i].handled = FALSE;
 		dcache_invalidate();
 		interrupt_set_handler(i, default_handler);
 	}
-
-	kputs("initializing interrupts\n");
 }
 
