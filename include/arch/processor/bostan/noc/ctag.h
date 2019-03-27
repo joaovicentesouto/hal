@@ -50,20 +50,20 @@
 	#define BOSTAN_CNOC_TX_TYPE BOSTAN_NOC_TX_TYPE /**< C-NoC transfer type. */
 	/**@}*/
 
-    /**
+	/**
 	 * @name Control NoC Modes
 	 */
 	/**@{*/
-    #define BOSTAN_CNOC_MAILBOX_MODE 0 /**< Mailbox mode */
-    #define BOSTAN_CNOC_BARRIER_MODE 1 /**< Barrier mode */
-    /**@}*/
+	#define BOSTAN_CNOC_MAILBOX_MODE 0 /**< Mailbox mode */
+	#define BOSTAN_CNOC_BARRIER_MODE 1 /**< Barrier mode */
+	/**@}*/
 
 	/**
 	 * @name Amount of the C-NoC Resources
 	 */
 	/**@{*/
 	#define BOSTAN_CNOC_RX_MAX 128 /**< Receiver amount. */
-    #define BOSTAN_CNOC_TX_MAX 4   /**< Sender amount.   */
+	#define BOSTAN_CNOC_TX_MAX 4   /**< Sender amount.   */
 	/**@}*/
 
 	/**
@@ -107,7 +107,7 @@
 	static inline int bostan_cnoc_rx_is_valid(int interface, int tag)
 	{
 		return WITHIN(interface, 0, BOSTAN_NR_INTERFACES)
-		    && WITHIN(tag, BOSTAN_CNOC_RX_BASE, BOSTAN_NR_CNOC_RX);
+			&& WITHIN(tag, BOSTAN_CNOC_RX_BASE, BOSTAN_NR_CNOC_RX);
 	}
 
 	/**
@@ -168,7 +168,7 @@
 	 *
 	 * @return Zero if configure sucefully and non zero otherwise.
 	 */
-    EXTERN int bostan_cnoc_rx_config(int interface, int tag, int mode, uint64_t mask);
+	EXTERN int bostan_cnoc_rx_config(int interface, int tag, int mode, uint64_t mask);
 
 /*============================================================================*
  * C-Noc Transfer Interface                                                   *
@@ -185,7 +185,7 @@
 	static inline int bostan_cnoc_tx_is_valid(int interface, int tag)
 	{
 		return WITHIN(interface, 0, BOSTAN_NR_INTERFACES)
-		    && WITHIN(tag, BOSTAN_CNOC_TX_BASE, BOSTAN_NR_CNOC_TX);
+			&& WITHIN(tag, BOSTAN_CNOC_TX_BASE, BOSTAN_NR_CNOC_TX);
 	}
 
 	/**
@@ -235,7 +235,7 @@
 	 *
 	 * @return Zero if configure sucefully and non zero otherwise.
 	 */
-    EXTERN int bostan_cnoc_tx_config(
+	EXTERN int bostan_cnoc_tx_config(
 		int interface,
 		int source_node,
 		int source_tag,

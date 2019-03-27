@@ -54,18 +54,7 @@ PUBLIC void kmain(int argc, const char *argv[])
 	 */
 	hal_init();
 
-	test_interrupt();
-	test_exception();
-	test_clock();
-	test_tlb();
-	test_mmu();
-	test_core();
-	test_trap();
-	test_upcall();
-
-#if (TARGET_HAS_SYNC)
-	test_sync();
-#endif
+	kalray_sync();
 
 	kprintf("[hal] halting...");
 
