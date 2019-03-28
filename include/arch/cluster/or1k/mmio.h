@@ -22,58 +22,21 @@
  * SOFTWARE.
  */
 
-#ifndef NANVIX_HAL_CLUSTER_MMIO_H_
-#define NANVIX_HAL_CLUSTER_MMIO_H_
-
-	/* Cluster Interface Implementation */
-	#include <nanvix/hal/cluster/_cluster.h>
-
-	#include <nanvix/const.h>
-
-/*============================================================================*
- * Interface Implementation Checking                                          *
- *============================================================================*/
-
-#ifdef __INTERFACE_CHECK
-
-	/* Constants */
-	#ifndef CLUSTER_SUPPORTS_MMIO
-	#error "does this cluster supports memory-mapped i/o devices?"
-	#endif
-
-	#if (CLUSTER_SUPPORTS_MMIO)
-
-		/* Functions*/
-		#ifndef __mmio_write8_fn
-		#error "mmio_write8() not defined?"
-		#endif
-		#ifndef __mmio_write8s_fn
-		#error "mmio_write8s() not defined?"
-		#endif
-		#ifndef __mmio_read8_fn
-		#error "mmio_read8() not defined?"
-		#endif
-		#ifndef __mmio_read8s_fn
-		#error "mmio_read8s() not defined?"
-		#endif
-
-	#endif
-
-#endif
-
-/*============================================================================*
- * MMIO Interface                                                             *
- *============================================================================*/
+#ifndef CLUSTER_OR1K_MMIO_H_
+#define CLUSTER_OR1K_MMIO_H_
 
 /**
- * @defgroup kernel-hal-cluster-mmio MMIO
- * @ingroup kernel-hal-cluster
+ * @addtogroup or1k-core-io Memory-Mapped I/O
+ * @ingroup or1k-core
  *
- * @brief MMIO Interface
+ * @brief Memory-Mapped I/O
  */
 /**@{*/
 
-#if (CLUSTER_SUPPORTS_MMIO)
+	#define __NEED_MEMORY_TYPES
+	#include <arch/core/or1k/types.h>
+	#include <sys/types.h>
+	#include <stdint.h>
 
 	/**
 	 * @brief Writes an 8-bit value to a memory-mapped i/o device.
@@ -84,7 +47,7 @@
 	 * @returns Upon successful completion, zero is returned. Upon
 	 * failure, a negative error code is returned instead.
 	 */
-	EXTERN int mmio_write8(vaddr_t vaddr, uint8_t value);
+	EXTERN int or1k_mmio_write8(vaddr_t vaddr, uint8_t value);
 
 	/**
 	 * @brief Writes an 8-bit string to a memory-mapped i/o device.
@@ -95,7 +58,7 @@
 	 * @returns Upon successful completion, zero is returned. Upon
 	 * failure, a negative error code is returned instead.
 	 */
-	EXTERN int mmio_write8s(vaddr_t vaddr, const uint8_t *str);
+	EXTERN int or1k_mmio_write8s(vaddr_t vaddr, const uint8_t *str);
 
 	/**
 	 * @brief Reads an 8-bit value from a memory-mapped i/o device.
@@ -106,9 +69,9 @@
 	 * @returns Upon successful completion, zero is returned. Upon
 	 * failure, a negative error code is returned instead.
 	 */
-	EXTERN int mmio_read8(vaddr_t vaddr, uint8_t *valuep);
+	EXTERN int or1k_mmio_read8(vaddr_t vaddr, uint8_t *valuep);
 
-	/**
+		/**
 	 * @brief Reads an 8-bit string from a memory-mapped i/o device.
 	 *
 	 * @param vaddr Target virtual address.
@@ -117,10 +80,60 @@
 	 * @returns Upon successful completion, zero is returned. Upon
 	 * failure, a negative error code is returned instead.
 	 */
-	EXTERN int mmio_read8s(vaddr_t vaddr, uint8_t **strp);
+	EXTERN int or1k_mmio_read8s(vaddr_t vaddr, uint8_t **strp);
 
-#endif /* CLUSTER_SUPPORTS_MMIO */
+/**@}*/
 
-/**@{*/
+/*============================================================================*
+ * Exported Interface                                                         *
+ *============================================================================*/
 
-#endif /* NANVIX_HAL_CLUSTER_MMIO_H_ */
+/**
+ * @cond or1k
+ */
+
+	/**
+	 * @name Provided Functions
+	 */
+	/**@{*/
+	#define __mmio_write8_fn  /**< or1k_mmio_write8()  */
+	#define __mmio_write8s_fn /**< or1k_mmio_write8s() */
+	#define __mmio_read8_fn   /**< or1k_mmio_read8()   */
+	#define __mmio_read8s_fn  /**< or1k_mmio_read8s()  */
+	/**@}*/
+
+	/**
+	 * @see or1k_mmio_write8().
+	 */
+	static inline int mmio_write8(vaddr_t vaddr, uint8_t value)
+	{
+		return (or1k_mmio_write8(vaddr, value));
+	}
+
+	/**
+	 * @see or1k_mmio_write8s().
+	 */
+	static inline int mmio_write8s(vaddr_t vaddr, const uint8_t *str)
+	{
+		return (or1k_mmio_write8s(vaddr, str));
+	}
+
+	/**
+	 * @see or1k_mmio_read8().
+	 */
+	static inline int mmio_read8(vaddr_t vaddr, uint8_t *valuep)
+	{
+		return (or1k_mmio_read8(vaddr, valuep));
+	}
+
+	/**
+	 * @see or1k_mmio_read8s().
+	 */
+	static inline int mmio_read8s(vaddr_t vaddr, uint8_t **strp)
+	{
+		return (or1k_mmio_read8s(vaddr, strp));
+	}
+
+/**@endcond*/
+
+#endif /* CLUSTER_OR1K_MMIO_H_ */

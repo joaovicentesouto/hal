@@ -114,6 +114,11 @@
 	 * @brief Enables the MMU.
 	 */
 	EXTERN void or1k_enable_mmu(void);
+	
+	/**
+	 * @brief Enables the MMU.
+	 */
+	EXTERN paddr_t or1k_pagewalk(vaddr_t vaddr);
 
 #endif /* _ASM_FILE_ */
 

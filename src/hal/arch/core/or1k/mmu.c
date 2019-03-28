@@ -77,6 +77,47 @@ PUBLIC struct pte *kernel_pgtab = &or1k_kernel_pgtab[0];
 PUBLIC struct pte *kpool_pgtab = &or1k_kpool_pgtab[0];
 
 /**
+ * @brief Searches for a page belonging to a given virtual
+ * address.
+ *
+ * The or1k_pagewalk function does a page walk in the system
+ * and returns the virtual address of the page belonging the
+ * given virtual address.
+ *
+ * @param vaddr Virtual address.
+ * @return Returns the virtual address of the page.
+ *
+ * @author Davidson Francis
+ */
+PUBLIC paddr_t or1k_pagewalk(vaddr_t vaddr)
+{
+	vaddr_t vaddr_aligned; /* Virtual address aligned.        */
+	paddr_t paddr;         /* Physical address.               */
+	struct pte *pte;       /* Working page table table entry. */
+	struct pde *pde;       /* Working page directory entry.   */
+	struct pte *pgtab;     /* Working page table.             */
+
+	vaddr_aligned = vaddr;
+	vaddr_aligned &= OR1K_PAGE_MASK;
+
+	/* Lookup PDE. */
+	pde = pde_get(root_pgdir, vaddr);
+	if (!pde_is_present(pde))
+		kpanic("[mmu] page fault at %x", vaddr);
+
+	/* Lookup PTE. */
+	pgtab = (struct pte *)(pde_frame_get(pde) << OR1K_PAGE_SHIFT);
+	pte = pte_get(pgtab, vaddr);
+	if (!pte_is_present(pte))
+		kpanic("[mmu] page fault at %x", vaddr);
+
+	/* Writing mapping to TLB. */
+	paddr =  pte_frame_get(pte) << OR1K_PAGE_SHIFT;
+
+	return (paddr);
+}
+
+/**
  * @brief Handles a TLB fault.
  *
  * The or1k_do_tlb_fault() function handles a early TLB faults. It
@@ -96,12 +137,9 @@ PRIVATE void or1k_do_tlb_fault(
 	const struct context *ctx
 )
 {
-	int tlb;           /* Target TLB.                     */
-	paddr_t paddr;     /* Physical address.               */
-	vaddr_t vaddr;     /* Faulting address.               */
-	struct pte *pte;   /* Working page table table entry. */
-	struct pde *pde;   /* Working page directory entry.   */
-	struct pte *pgtab; /* Working page table.             */
+	int tlb;       /* Target TLB.        */
+	paddr_t paddr; /* Physical address.  */
+	vaddr_t vaddr; /* Faulting address.  */
 
 	UNUSED(ctx);
 
@@ -109,19 +147,9 @@ PRIVATE void or1k_do_tlb_fault(
 	vaddr = or1k_excp_get_addr(excp);
 	vaddr &= OR1K_PAGE_MASK;
 
-	/* Lookup PDE. */
-	pde = pde_get(root_pgdir, vaddr);
-	if (!pde_is_present(pde))
-		kpanic("[hal] page fault at %x", exception_get_addr(excp));
-
-	/* Lookup PTE. */
-	pgtab = (struct pte *)(pde_frame_get(pde) << OR1K_PAGE_SHIFT);
-	pte = pte_get(pgtab, vaddr);
-	if (!pte_is_present(pte))
-		kpanic("[hal] page fault at %x", exception_get_addr(excp));
-
 	/* Writing mapping to TLB. */
-	paddr = pte_frame_get(pte) << OR1K_PAGE_SHIFT;
+	paddr = or1k_pagewalk(vaddr);
+
 	tlb = (excp->num == OR1K_EXCEPTION_ITLB_FAULT) ?
 		OR1K_TLB_INSTRUCTION : OR1K_TLB_DATA;
 	if (or1k_tlb_write(tlb, vaddr, paddr) < 0)
